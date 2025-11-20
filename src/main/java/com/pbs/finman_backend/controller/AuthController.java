@@ -4,6 +4,7 @@ import com.pbs.finman_backend.dto.AuthResponseDTO;
 import com.pbs.finman_backend.dto.LoginRequestDTO;
 import com.pbs.finman_backend.dto.RegisterRequestDTO;
 import com.pbs.finman_backend.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,13 +22,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody RegisterRequestDTO request) {
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequestDTO request) {
         authService.register(request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginRequestDTO request) {
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         String token = authService.login(request);
         return ResponseEntity.ok(new AuthResponseDTO(token));
     }

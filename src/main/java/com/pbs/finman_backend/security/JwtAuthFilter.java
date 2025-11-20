@@ -13,11 +13,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.List;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
@@ -32,18 +36,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-
         String token = authHeader.substring(7);
         String email;
+        if (!jwtService.isTokenValid(token)) {
+            logger.warn("Invalid or expired JWT token");
+            filterChain.doFilter(request, response);
+            return;
+        }
         try {
             email = jwtService.extractSubject(token);
         } catch (Exception e) {
+            logger.error("JWT extraction failed: {}", e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
