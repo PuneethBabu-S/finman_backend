@@ -27,6 +27,10 @@ public class User {
     @Column(nullable = false)
     private Boolean active = true;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 

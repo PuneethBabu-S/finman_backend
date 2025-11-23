@@ -2,12 +2,15 @@ package com.pbs.finman_backend.service.impl;
 
 import com.pbs.finman_backend.dto.LoginRequestDTO;
 import com.pbs.finman_backend.dto.RegisterRequestDTO;
+import com.pbs.finman_backend.entity.Role;
 import com.pbs.finman_backend.entity.User;
 import com.pbs.finman_backend.repository.UserRepository;
 import com.pbs.finman_backend.security.JwtService;
 import com.pbs.finman_backend.service.IAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +41,7 @@ public class AuthService implements IAuthService {
         user.setEmail(request.getEmail());
         user.setFullName(request.getFullName());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
     }
 
@@ -56,4 +60,16 @@ public class AuthService implements IAuthService {
 
         return jwtService.generateToken(user.getEmail());
     }
+
+    @Override
+    public String getUserName() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+            return principal.getUsername();
+        }
+        //throw exception message
+        throw new Exception("User not authenticated");
+    }
+
 }

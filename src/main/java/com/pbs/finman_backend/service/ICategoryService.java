@@ -5,7 +5,9 @@ import com.pbs.finman_backend.dto.CategoryDTO;
 import java.util.List;
 
 public interface ICategoryService {
-    public List<CategoryDTO> getGlobalCategories();
-    public List<CategoryDTO> getUserCategories(Long userId);
-    public void createCategory(CategoryDTO categoryDTO);
+    public CategoryDTO createCategory(CategoryDTO categoryDTO);
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO);
+    public String deleteCategory(Long categoryId);
+    public CategoryDTO getCategoryById(Long categoryId);
+    public List<CategoryDTO> getCategories(Boolean forAllUsers) throws Exception;
 }
