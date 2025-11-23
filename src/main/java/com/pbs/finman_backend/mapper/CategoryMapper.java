@@ -21,4 +21,16 @@ public class CategoryMapper {
         }
         return dto;
     }
+
+    public static Category toEntity(CategoryDTO dto, User owner) {
+        if (dto == null) return null;
+
+        Category entity = new Category();
+        entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setIsGlobal(false);
+        entity.setOwner(owner);
+        return entity;
+    }
 }

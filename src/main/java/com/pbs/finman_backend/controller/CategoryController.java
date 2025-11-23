@@ -18,9 +18,8 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO){
-        categoryService.createCategory(categoryDTO);
-        return ResponseEntity.ok(categoryDTO);
+    public ResponseEntity<String> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws Exception {
+        return ResponseEntity.ok(categoryService.createCategory(categoryDTO));
     }
 
     @GetMapping("getCategories")

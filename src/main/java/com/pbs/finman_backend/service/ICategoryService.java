@@ -5,7 +5,7 @@ import com.pbs.finman_backend.dto.CategoryDTO;
 import java.util.List;
 
 public interface ICategoryService {
-    public CategoryDTO createCategory(CategoryDTO categoryDTO);
+    public String createCategory(CategoryDTO categoryDTO) throws Exception;
     public CategoryDTO updateCategory(CategoryDTO categoryDTO);
     public String deleteCategory(Long categoryId);
     public CategoryDTO getCategoryById(Long categoryId);

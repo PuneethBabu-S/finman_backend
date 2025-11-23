@@ -8,5 +8,6 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findByIsGlobalTrue();
     List<Category> findByOwnerId(Long ownerId);
+    Boolean existsByName(String name);
 }
 

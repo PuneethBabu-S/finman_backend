@@ -1,6 +1,7 @@
 package com.pbs.finman_backend.service.impl;
 
 import com.pbs.finman_backend.dto.CategoryDTO;
+import com.pbs.finman_backend.entity.Category;
 import com.pbs.finman_backend.entity.Role;
 import com.pbs.finman_backend.entity.User;
 import com.pbs.finman_backend.mapper.CategoryMapper;
@@ -27,12 +28,25 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        return null;
+    public String createCategory(CategoryDTO categoryDTO) throws Exception {
+
+        if(categoryRepository.existsByName(categoryDTO.getName())){
+            return "Category with the same name already exists";
+        }
+
+        User curentUser = getCurrentUser();
+        Category category = CategoryMapper.toEntity(categoryDTO, curentUser);
+
+        if(categoryDTO.getIsGlobal() && !curentUser.getRole().equals(Role.ADMIN)){
+            category.setIsGlobal(false);
+        }
+        categoryRepository.save(category);
+        return "Category created successfully";
     }
 
     @Override
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
+
         return null;
     }
 
@@ -49,8 +63,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public List<CategoryDTO> getCategories(Boolean forAllUsers) throws Exception {
         try {
-            String userName = authService.getUserName();
-            User user = userRepository.findByEmail(userName).orElseThrow(() -> new Exception("User not found"));
+            User user = getCurrentUser();
             Set<CategoryDTO> categories = new HashSet<>();
             if (forAllUsers && user.getRole().equals(Role.ADMIN)) {
                 categoryRepository.findAll().forEach(category -> categories.add(CategoryMapper.toDto(category)));
@@ -64,6 +77,11 @@ public class CategoryService implements ICategoryService {
         catch (Exception e) {
             throw new Exception("Failed to retrieve categories: " + e.getMessage());
         }
+    }
+
+    private User getCurrentUser() throws Exception {
+        String userName = authService.getUserName();
+        return userRepository.findByEmail(userName).orElseThrow(() -> new Exception("User not found"));
     }
 
 }
