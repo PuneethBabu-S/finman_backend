@@ -1,11 +1,12 @@
 package com.pbs.finman_backend.controller;
 
 import com.pbs.finman_backend.dto.CategoryDTO;
-import com.pbs.finman_backend.entity.Category;
 import com.pbs.finman_backend.service.CategoryService;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,12 +20,12 @@ public class CategoryController {
     }
 
     @GetMapping("/global")
-    public ResponseEntity<List<Category>> getGlobalCategories() {
+    public ResponseEntity<List<CategoryDTO>> getGlobalCategories() {
         return ResponseEntity.ok(categoryService.getGlobalCategories());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Category>> getUserCategories(@PathVariable Long userId) {
+    public ResponseEntity<List<CategoryDTO>> getUserCategories(@PathVariable Long userId) {
         return ResponseEntity.ok(categoryService.getUserCategories(userId));
     }
 

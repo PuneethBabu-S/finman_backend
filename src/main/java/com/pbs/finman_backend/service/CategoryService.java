@@ -2,6 +2,7 @@ package com.pbs.finman_backend.service;
 
 import com.pbs.finman_backend.dto.CategoryDTO;
 import com.pbs.finman_backend.entity.Category;
+import com.pbs.finman_backend.mapper.CategoryMapper;
 import com.pbs.finman_backend.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,20 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<Category> getGlobalCategories() {
-        return categoryRepository.findByIsGlobalTrue();
+    public List<CategoryDTO> getGlobalCategories() {
+
+        List<Category> byIsGlobalTrue = categoryRepository.findByIsGlobalTrue();
+        return byIsGlobalTrue.stream()
+                .map(CategoryMapper::toDto)
+                .toList();
     }
 
-    public List<Category> getUserCategories(Long userId) {
-        return categoryRepository.findByOwnerId(userId);
+    public List<CategoryDTO> getUserCategories(Long userId) {
+
+        List<Category> byOwnerId = categoryRepository.findByOwnerId(userId);
+        return byOwnerId.stream()
+                .map(CategoryMapper::toDto)
+                .toList();
     }
 
     // Add create, update, delete methods as needed

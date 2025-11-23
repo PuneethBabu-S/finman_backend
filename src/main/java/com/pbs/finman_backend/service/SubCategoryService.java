@@ -2,6 +2,7 @@ package com.pbs.finman_backend.service;
 
 import com.pbs.finman_backend.dto.SubCategoryDTO;
 import com.pbs.finman_backend.entity.SubCategory;
+import com.pbs.finman_backend.mapper.SubCategoryMapper;
 import com.pbs.finman_backend.repository.SubCategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,19 +16,27 @@ public class SubCategoryService {
         this.subCategoryRepository = subCategoryRepository;
     }
 
-    public List<SubCategory> getGlobalSubCategories() {
-        return subCategoryRepository.findByIsGlobalTrue();
+    public List<SubCategoryDTO> getGlobalSubCategories() {
+        List<SubCategory> byIsGlobalTrue = subCategoryRepository.findByIsGlobalTrue();
+        return byIsGlobalTrue.stream()
+                .map(SubCategoryMapper::toDto)
+                .toList();
     }
 
-    public List<SubCategory> getUserSubCategories(Long userId) {
-        return subCategoryRepository.findByOwnerId(userId);
+    public List<SubCategoryDTO> getUserSubCategories(Long userId) {
+        List<SubCategory> byOwnerId = subCategoryRepository.findByOwnerId(userId);
+        return byOwnerId.stream()
+                .map(SubCategoryMapper::toDto)
+                .toList();
     }
 
-    public List<SubCategory> getSubCategoriesByCategory(Long categoryId) {
-        return subCategoryRepository.findByParentCategoryId(categoryId);
+    public List<SubCategoryDTO> getSubCategoriesByCategory(Long categoryId) {
+        return subCategoryRepository.findByParentCategoryId(categoryId).stream()
+                .map(SubCategoryMapper::toDto)
+                .toList();
     }
 
-    public SubCategory createSubCategory(SubCategoryDTO dto, Long userId) {
+    public SubCategoryDTO createSubCategory(SubCategoryDTO dto, Long userId) {
         SubCategory subCategory = new SubCategory();
         subCategory.setName(dto.getName());
         subCategory.setDescription(dto.getDescription());
@@ -40,6 +49,7 @@ public class SubCategoryService {
         // Set parent category
         subCategory.setParentCategory(new com.pbs.finman_backend.entity.Category());
         subCategory.getParentCategory().setId(dto.getParentCategoryId());
-        return subCategoryRepository.save(subCategory);
+        SubCategory save = subCategoryRepository.save(subCategory);
+        return SubCategoryMapper.toDto(save);
     }
 }

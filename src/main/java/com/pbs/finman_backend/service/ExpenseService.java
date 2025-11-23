@@ -1,6 +1,5 @@
 package com.pbs.finman_backend.service;
 
-import com.pbs.finman_backend.dto.ExpenseDTO;
 import com.pbs.finman_backend.entity.Expense;
 import com.pbs.finman_backend.repository.ExpenseRepository;
 import org.springframework.stereotype.Service;

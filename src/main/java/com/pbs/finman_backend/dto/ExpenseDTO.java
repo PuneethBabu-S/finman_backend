@@ -1,9 +1,10 @@
 package com.pbs.finman_backend.dto;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.DecimalMin;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 

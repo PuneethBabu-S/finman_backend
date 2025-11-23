@@ -1,8 +1,8 @@
 package com.pbs.finman_backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @Setter
