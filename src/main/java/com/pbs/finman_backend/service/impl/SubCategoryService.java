@@ -1,21 +1,23 @@
-package com.pbs.finman_backend.service;
+package com.pbs.finman_backend.service.impl;
 
 import com.pbs.finman_backend.dto.SubCategoryDTO;
 import com.pbs.finman_backend.entity.SubCategory;
 import com.pbs.finman_backend.mapper.SubCategoryMapper;
 import com.pbs.finman_backend.repository.SubCategoryRepository;
+import com.pbs.finman_backend.service.ISubCategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class SubCategoryService {
+public class SubCategoryService implements ISubCategoryService {
     private final SubCategoryRepository subCategoryRepository;
 
     public SubCategoryService(SubCategoryRepository subCategoryRepository) {
         this.subCategoryRepository = subCategoryRepository;
     }
 
+    @Override
     public List<SubCategoryDTO> getGlobalSubCategories() {
         List<SubCategory> byIsGlobalTrue = subCategoryRepository.findByIsGlobalTrue();
         return byIsGlobalTrue.stream()
@@ -23,6 +25,7 @@ public class SubCategoryService {
                 .toList();
     }
 
+    @Override
     public List<SubCategoryDTO> getUserSubCategories(Long userId) {
         List<SubCategory> byOwnerId = subCategoryRepository.findByOwnerId(userId);
         return byOwnerId.stream()
@@ -30,12 +33,14 @@ public class SubCategoryService {
                 .toList();
     }
 
+    @Override
     public List<SubCategoryDTO> getSubCategoriesByCategory(Long categoryId) {
         return subCategoryRepository.findByParentCategoryId(categoryId).stream()
                 .map(SubCategoryMapper::toDto)
                 .toList();
     }
 
+    @Override
     public SubCategoryDTO createSubCategory(SubCategoryDTO dto, Long userId) {
         SubCategory subCategory = new SubCategory();
         subCategory.setName(dto.getName());

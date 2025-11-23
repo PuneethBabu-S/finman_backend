@@ -1,7 +1,7 @@
 package com.pbs.finman_backend.controller;
 
 import com.pbs.finman_backend.dto.SubCategoryDTO;
-import com.pbs.finman_backend.service.SubCategoryService;
+import com.pbs.finman_backend.service.ISubCategoryService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/subcategories")
 public class SubCategoryController {
-    private final SubCategoryService subCategoryService;
+    private final ISubCategoryService subCategoryService;
 
-    public SubCategoryController(SubCategoryService subCategoryService) {
+    public SubCategoryController(ISubCategoryService subCategoryService) {
         this.subCategoryService = subCategoryService;
     }
 

@@ -1,7 +1,7 @@
 package com.pbs.finman_backend.controller;
 
 import com.pbs.finman_backend.entity.Expense;
-import com.pbs.finman_backend.service.ExpenseService;
+import com.pbs.finman_backend.service.IExpenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,9 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/expenses")
 public class ExpenseController {
-    private final ExpenseService expenseService;
+    private final IExpenseService expenseService;
 
-    public ExpenseController(ExpenseService expenseService) {
+    public ExpenseController(IExpenseService expenseService) {
         this.expenseService = expenseService;
     }
 

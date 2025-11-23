@@ -1,17 +1,18 @@
-package com.pbs.finman_backend.service;
+package com.pbs.finman_backend.service.impl;
 
 import com.pbs.finman_backend.dto.LoginRequestDTO;
 import com.pbs.finman_backend.dto.RegisterRequestDTO;
 import com.pbs.finman_backend.entity.User;
 import com.pbs.finman_backend.repository.UserRepository;
 import com.pbs.finman_backend.security.JwtService;
+import com.pbs.finman_backend.service.IAuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthService {
+public class AuthService implements IAuthService {
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final UserRepository userRepository;
@@ -25,6 +26,7 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
+    @Override
     public void register(RegisterRequestDTO request) {
         userRepository.findByEmail(request.getEmail())
                 .ifPresent(u -> {
@@ -39,6 +41,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    @Override
     public String login(LoginRequestDTO request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> {

@@ -1,21 +1,18 @@
 package com.pbs.finman_backend.controller;
 
 import com.pbs.finman_backend.dto.CategoryDTO;
-import com.pbs.finman_backend.service.CategoryService;
+import com.pbs.finman_backend.service.ICategoryService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-    private final CategoryService categoryService;
+    private final ICategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(ICategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
@@ -29,6 +26,10 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getUserCategories(userId));
     }
 
-    // Add create, update, delete endpoints as needed
+    @PostMapping("/create")
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO){
+        categoryService.createCategory(categoryDTO);
+        return ResponseEntity.ok(categoryDTO);
+    }
 }
 

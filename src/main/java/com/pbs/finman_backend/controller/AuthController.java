@@ -3,7 +3,7 @@ package com.pbs.finman_backend.controller;
 import com.pbs.finman_backend.dto.AuthResponseDTO;
 import com.pbs.finman_backend.dto.LoginRequestDTO;
 import com.pbs.finman_backend.dto.RegisterRequestDTO;
-import com.pbs.finman_backend.service.AuthService;
+import com.pbs.finman_backend.service.IAuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthService authService;
+    private final IAuthService authService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(IAuthService authService) {
         this.authService = authService;
     }
 
