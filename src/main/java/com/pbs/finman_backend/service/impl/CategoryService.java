@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -34,10 +35,10 @@ public class CategoryService implements ICategoryService {
             return "Category with the same name already exists";
         }
 
-        User curentUser = getCurrentUser();
-        Category category = CategoryMapper.toEntity(categoryDTO, curentUser);
+        User currentUser = getCurrentUser();
+        Category category = CategoryMapper.toEntity(categoryDTO, currentUser);
 
-        if(categoryDTO.getIsGlobal() && !curentUser.getRole().equals(Role.ADMIN)){
+        if(categoryDTO.getIsGlobal() && !currentUser.getRole().equals(Role.ADMIN)){
             category.setIsGlobal(false);
         }
         categoryRepository.save(category);
@@ -45,19 +46,42 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
-
-        return null;
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO) throws Exception {
+        Category category = categoryRepository.findById(categoryDTO.getId()).orElse(null);
+        User currentUser = getCurrentUser();
+        if(category != null) {
+            if(categoryDTO.getIsGlobal() && !currentUser.getRole().equals(Role.ADMIN)){
+                throw new Exception("Only admin can update global categories");
+            }
+            if(!Objects.equals(currentUser.getId(), category.getOwner().getId())){
+                throw new Exception("No such category found for the user");
+            }
+        }
+        category = CategoryMapper.toEntity(categoryDTO, currentUser);
+        categoryRepository.save(category);
+        return categoryDTO;
     }
 
     @Override
-    public String deleteCategory(Long categoryId) {
-        return "";
+    public String deleteCategory(Long categoryId) throws Exception {
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        User currentUser = getCurrentUser();
+        if(category != null) {
+            if(category.getIsGlobal() && !currentUser.getRole().equals(Role.ADMIN)){
+                throw new Exception("Only admin can delete global categories");
+            }
+            if(!Objects.equals(currentUser.getId(), category.getOwner().getId())){
+                throw new Exception("No such category found for the user");
+            }
+        }
+        categoryRepository.deleteById(categoryId);
+        return "Category deleted successfully";
     }
 
     @Override
     public CategoryDTO getCategoryById(Long categoryId) {
-        return null;
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        return CategoryMapper.toDto(category);
     }
 
     @Override

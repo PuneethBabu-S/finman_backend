@@ -22,9 +22,24 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.createCategory(categoryDTO));
     }
 
-    @GetMapping("getCategories")
+    @GetMapping("/getcategories")
     public ResponseEntity<List<CategoryDTO>> getCategories(@Valid @RequestParam(name = "forAllUsers", required = false, defaultValue = "false") Boolean forAllUsers) throws Exception {
         return ResponseEntity.ok(categoryService.getCategories(forAllUsers));
+    }
+
+    @GetMapping("/getcategory/{categoryId}")
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(categoryService.getCategoryById(categoryId));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws Exception {
+        return ResponseEntity.ok(categoryService.updateCategory(categoryDTO));
+    }
+
+    @DeleteMapping("/delete/{categoryId}")
+    public ResponseEntity<String> deleteCategory(@PathVariable Long categoryId) throws Exception {
+        return ResponseEntity.ok(categoryService.deleteCategory(categoryId));
     }
 }
 

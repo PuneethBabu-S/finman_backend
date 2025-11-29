@@ -1,5 +1,6 @@
 package com.pbs.finman_backend.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ public class CategoryDTO {
     @NotBlank
     private String name;
     private String description;
+    @NotNull
     private Boolean isGlobal;
     private Long ownerId;
 }
